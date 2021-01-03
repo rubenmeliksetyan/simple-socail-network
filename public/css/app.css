@@ -10903,3 +10903,50 @@ a.text-dark:focus {
   }
 }
 
+.user-profile-container > div {
+  padding: 15px;
+}
+
+.user-profile-container > div > .card {
+  border: none;
+  background: none;
+  box-shadow: 10px 10px 20px -8px #827f82;
+}
+
+.user-profile-container > div > .card > * {
+  padding: 10px;
+}
+
+.user-profile-container > div > .card .user-details {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.user-profile-container > div > .card .user-details > h5 {
+  margin: 10px;
+}
+
+.user-profile-container > div > .card .user-profile-friends {
+  display: flex;
+  flex-wrap: wrap;
+  padding-left: 0;
+}
+
+.user-profile-container > div > .card .user-profile-friends > .approved-friend {
+  margin: 5px;
+  border: solid #acacde;
+  border-width: medium;
+}
+
+.user-profile-container > div > .card .user-profile-friends > .approved-friend h5 {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  width: 125px;
+  overflow: hidden;
+}
+
+.alert-danger {
+  margin-top: 10px;
+}
+

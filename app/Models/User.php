@@ -4,12 +4,25 @@ namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
     use HasFactory, Notifiable;
+
+    // Friendship statuses
+
+    const FRIENDSHIP_STATUS_APPROVED = 'approved';
+    const FRIENDSHIP_STATUS_PENDING = 'pending';
+    const FRIENDSHIP_STATUS_REJECTED = 'rejected';
+
+    const FRIENDSHIP_STATUS_MAP = [
+        0 => self::FRIENDSHIP_STATUS_PENDING,
+        1 => self::FRIENDSHIP_STATUS_APPROVED,
+        2 => self::FRIENDSHIP_STATUS_REJECTED
+    ];
 
     /**
      * The attributes that are mass assignable.
@@ -18,6 +31,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'surname',
         'email',
         'password',
     ];
@@ -40,4 +54,35 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     *  User all friends
+     *
+     * @return BelongsToMany
+     */
+    public function allFriends() :BelongsToMany
+    {
+        return $this->belongsToMany(
+            User::class,
+            'user_friend',
+            'sender_id',
+            'receiver_id')
+            ->withPivot('status');
+    }
+
+    /**
+     *  User approved friends
+     *
+     * @return BelongsToMany
+     */
+    public function approvedFriends() :BelongsToMany
+    {
+        return $this->belongsToMany(
+            User::class,
+            'user_friend',
+            'sender_id',
+            'receiver_id')
+            ->wherePivot('status', 1);
+    }
+
 }
