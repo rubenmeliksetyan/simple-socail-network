@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UserUpdateRequest;
-use App\Repositories\ProfileRepository;
-use Illuminate\Http\Request;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Session;
 
 class ProfileController extends Controller
@@ -14,36 +14,57 @@ class ProfileController extends Controller
     /**
      * [Route("/profile/", methods: ["GET"])]
      *
-     * @param ProfileRepository $user
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     * @return \Illuminate\Contracts\View\View
      */
-    public function index(ProfileRepository $user)
+    public function index()
     {
-        return view('profile.index', ['profileData' => $user->getUserWithApprovedFriends()]);
+        return view('profile.index', [
+            'profileData' => [
+                'user' => Auth::user(),
+                'approvedFriends' => Auth::user()->approvedFriends()
+                    ->take(Config::get('constants.profile_friends_count'))->get(),
+            ]
+
+        ]);
     }
 
     /**
      *  [Route("/profile/edit", methods: ["GET"])]
      *
-     * @param ProfileRepository $user
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     * @return \Illuminate\Contracts\View\View
      */
-    public function edit(ProfileRepository $user)
+    public function edit()
     {
-        return view('profile.edit', ['user' => $user->getUser()]);
+        return view('profile.edit', ['user' => Auth::user()]);
     }
 
+    /**
+     * [Route("/profile/{user:id}/show", methods: ["GET"])]
+     *
+     * @param User $user
+     * @return \Illuminate\Contracts\View\View
+     */
+    public function show(User $user)
+    {
+        $profileData = [
+            'user' => $user,
+            'approvedFriends' => $user->approvedFriends()
+                ->take(Config::get('constants.profile_friends_count'))->get(),
+            'friendshipStatus' => Auth::user()->checkFriendshipStatus($user->id)
+        ];
+
+        return view('profile.show', compact('profileData'));
+    }
 
     /**
      *  [Route("/profile/update", methods: ["PUT"])]
      *
      * @param UserUpdateRequest $request
-     * @param ProfileRepository $user
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(UserUpdateRequest $request, ProfileRepository $user)
+    public function update(UserUpdateRequest $request)
     {
-        if ($user->updateUser($request->all())) {
+        if (Auth::user()->update($request->all())) {
             Session::flash('message', 'User has been updated');
             Session::flash('alert-class', 'alert-success');
         } else {

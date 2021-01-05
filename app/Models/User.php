@@ -13,15 +13,16 @@ class User extends Authenticatable
     use HasFactory, Notifiable;
 
     // Friendship statuses
-
     const FRIENDSHIP_STATUS_APPROVED = 'approved';
     const FRIENDSHIP_STATUS_PENDING = 'pending';
     const FRIENDSHIP_STATUS_REJECTED = 'rejected';
+    const FRIENDSHIP_STATUS_NONE = 'none';
 
     const FRIENDSHIP_STATUS_MAP = [
         0 => self::FRIENDSHIP_STATUS_PENDING,
         1 => self::FRIENDSHIP_STATUS_APPROVED,
-        2 => self::FRIENDSHIP_STATUS_REJECTED
+        2 => self::FRIENDSHIP_STATUS_REJECTED,
+        3 => self::FRIENDSHIP_STATUS_NONE
     ];
 
     /**
@@ -60,7 +61,7 @@ class User extends Authenticatable
      *
      * @return BelongsToMany
      */
-    public function allFriends() :BelongsToMany
+    public function friendship() :BelongsToMany
     {
         return $this->belongsToMany(
             User::class,
@@ -83,6 +84,21 @@ class User extends Authenticatable
             'sender_id',
             'receiver_id')
             ->wherePivot('status', 1);
+    }
+
+    /**
+     * @param int $id
+     * @return string
+     */
+    public function checkFriendshipStatus(int $id)
+    {
+        $friend = $this->friendship()->where('id', $id)->first();
+
+        if (!is_null($friend)) {
+            return self::FRIENDSHIP_STATUS_MAP[$friend->pivot->status];
+        }
+
+        return self::FRIENDSHIP_STATUS_NONE;
     }
 
 }

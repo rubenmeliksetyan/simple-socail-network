@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUserFriendTable extends Migration
+class CreateUserFriendsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateUserFriendTable extends Migration
      */
     public function up()
     {
-        Schema::create('user_friend', function (Blueprint $table) {
+        Schema::create('user_friends', function (Blueprint $table) {
             $table->unsignedBigInteger('sender_id')->unsigned();
             $table->unsignedBigInteger('receiver_id')->unsigned();
             $table->foreign('sender_id')

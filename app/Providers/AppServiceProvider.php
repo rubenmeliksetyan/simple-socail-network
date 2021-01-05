@@ -2,8 +2,8 @@
 
 namespace App\Providers;
 
-use App\Repositories\ProfileRepository;
-use Illuminate\Support\Facades\Auth;
+use App\Services\FriendshipInterface;
+use App\Services\FriendshipService;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -15,9 +15,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton(ProfileRepository::class, function ($app) {
-            return new ProfileRepository(Auth::user());
-        });
+        $this->app->bind(FriendshipInterface::class, FriendshipService::class);
     }
 
     /**
