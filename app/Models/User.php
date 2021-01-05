@@ -65,7 +65,7 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(
             User::class,
-            'user_friend',
+            'user_friends',
             'sender_id',
             'receiver_id')
             ->withPivot('status');
@@ -80,7 +80,7 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(
             User::class,
-            'user_friend',
+            'user_friends',
             'sender_id',
             'receiver_id')
             ->wherePivot('status', 1);

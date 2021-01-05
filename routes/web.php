@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\{FriendshipController, ProfileController};
+use App\Http\Controllers\{FriendshipController, ProfileController, UserController};
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,6 +21,7 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::middleware('auth')->group(function () {
+    Route::get('/users', [UserController::class, 'search'])->name('users.search');
 
     Route::prefix('profile')->name('profile.')->group(function () {
         Route::get('/', [ProfileController::class, 'index'])->name('index');

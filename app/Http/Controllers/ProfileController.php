@@ -42,10 +42,13 @@ class ProfileController extends Controller
      * [Route("/profile/{user:id}/show", methods: ["GET"])]
      *
      * @param User $user
-     * @return \Illuminate\Contracts\View\View
+     * @return \Illuminate\Contracts\View\View|\Illuminate\Http\RedirectResponse
      */
     public function show(User $user)
     {
+        if (Auth::id() == $user->id) {
+            return redirect()->route('profile.index');
+        }
         $profileData = [
             'user' => $user,
             'approvedFriends' => $user->approvedFriends()

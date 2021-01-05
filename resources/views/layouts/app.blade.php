@@ -34,7 +34,16 @@
                     <ul class="navbar-nav mr-auto">
 
                     </ul>
-
+                    <!-- for user search -->
+                    @if(\Illuminate\Support\Facades\Auth::check())
+                        <div class="input-group mb-1 col-md-4">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="inputGroup-sizing-default">Search</span>
+                            </div>
+                            <input type="text" id="search_users" class="form-control ui-autocomplete-input" aria-label="Search">
+                        </div>
+                        <div id="users_list"></div>
+                    @endif
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
                         <!-- Authentication Links -->
@@ -79,7 +88,7 @@
 
         <main class="py-4">
             @if(Session::has('message'))
-                <p class="alert {{ Session::get('alert-class', 'alert-info') }}" style="display: none;">{{ Session::get('message') }}</p>
+                <p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('message') }}</p>
             @endif
             <div id="messages" class="alert success" role="alert" style="display: none;"></div>
             @yield('content')
@@ -88,5 +97,16 @@
     <script src="{{ asset('js/app.js') }}"></script>
 
     @stack('scripts')
+    <script type="text/javascript" >
+        new social.AutocompleteManger({
+            elements: {
+                autocompleteInput: $('#search_users'),
+                usersList: $('#users_list')
+            },
+            urls: {
+                searchUserURL: "{{ route('users.search') }}"
+            }
+        })
+    </script>
 </body>
 </html>

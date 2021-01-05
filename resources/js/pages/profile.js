@@ -2,13 +2,13 @@ social.ProfilePageManger = function (config) {
     const _this = this;
     _this.config = config || {};
     _this.elements = this.config.elements || {};
-    _this.init();
+    _this._init();
 }
 
 social.ProfilePageManger.prototype = {
-    init: function () {
+
+    _init: function () {
         const _this = this;
-        // _this._initElements();
         _this._initListeners();
     },
 
@@ -60,7 +60,4 @@ social.ProfilePageManger.prototype = {
         })
     },
 
-    // _initElements: function () {
-    //
-    // }
 }
