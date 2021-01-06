@@ -26,7 +26,7 @@
                     @break
                     @case('pending')
                     <span id="pending_friend_request_btn"
-                            class="btn-info">{{ __('profile.friends.pending_friend_request') }}
+                          class="btn-info">{{ __('profile.friends.pending_friend_request') }}
                     </span>
                     <button class="unfriend btn btn-danger"
                             data-url="{{ route('friendship.unfriend', $profileData['user']->id) }}">
@@ -39,8 +39,9 @@
         @endif
 
     </div>
-    <h5 class="card-text">{{ __('profile.friends.title') }} <a href="#"
-                                                               class="">{{ $profileData['approvedFriends']->count() }}</a>
+    <h5 class="card-text">{{ __('profile.friends.title') }} <a
+                href="{{ route('profile.friends.list', $isAuthUser ? Auth::id() : $profileData['user']->id) }}"
+                class="">{{ $profileData['approvedFriends']->count() }}</a>
     </h5>
     <div class="user-profile-friends">
         @foreach($profileData['approvedFriends'] as $friend)

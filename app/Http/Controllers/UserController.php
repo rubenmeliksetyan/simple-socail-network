@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 class UserController extends Controller
 {
     /**
+     *  [Route("/users/", methods: ["GET"])]
+     *
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */

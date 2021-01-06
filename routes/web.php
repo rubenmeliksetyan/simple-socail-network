@@ -28,6 +28,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/edit', [ProfileController::class, 'edit'])->name('edit');
         Route::get('/{user:id}', [ProfileController::class, 'show'])->name('show');
         Route::put('/update', [ProfileController::class, 'update'])->name('update');
+        Route::get('{user:id}/list',[ProfileController::class, 'friendsList'])->name('friends.list');
     });
 
     Route::prefix('friendship')->name('friendship.')->group(function () {

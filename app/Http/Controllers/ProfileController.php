@@ -79,4 +79,13 @@ class ProfileController extends Controller
 
     }
 
+    /**
+     * @param User $user
+     * @return \Illuminate\Contracts\View\View
+     */
+    public function friendsList(User $user)
+    {
+        return view('profile.friends_list', compact('user'));
+    }
+
 }
