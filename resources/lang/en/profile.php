@@ -12,6 +12,7 @@ return [
         'unfriend' => 'unfriend',
         'title' => 'Friends',
         'see_all' => 'See All',
-        'pending_friend_requests' => 'Pending friend requests'
+        'pending_friend_requests' => 'Pending friend requests',
+        'no_notifications' => 'there is not notifications'
     ]
 ];

@@ -13,7 +13,7 @@
 
         <div class="col-xl-3">
             <div class="card">
-               @include('profile.components.notifications')
+               @include('profile.components.notifications',[$showSeeAll = true])
             </div>
         </div>
     </div>

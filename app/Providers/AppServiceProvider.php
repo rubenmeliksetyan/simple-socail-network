@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\Http\Views\Composers\UserNotifications;
 use App\Services\FriendshipInterface;
 use App\Services\FriendshipService;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -25,6 +27,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        View::composer('profile.components.notifications', UserNotifications::class);
     }
 }

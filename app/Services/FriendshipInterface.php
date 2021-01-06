@@ -24,10 +24,10 @@ interface FriendshipInterface
     public function sendFriendRequest(User $sender, User $receiver, int $status);
 
     /**
-     * @param Authenticatable $user
+     * @param User $user
      * @param User $receiver
      * @return mixed
      */
-    public function unFriend(Authenticatable $user, User $receiver);
+    public function unFriend(User $user, User $receiver);
 
 }

@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Notifications\FriendRequestNotification;
 use App\Services\FriendshipService;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 
 class FriendshipController extends Controller
 {
@@ -23,7 +25,7 @@ class FriendshipController extends Controller
         User $receiver
     )
     {
-        if ($sender->friendship->contains($receiver->id)) {
+        if ($sender->friends->contains($receiver->id)) {
             return response()->json([
                 'message' => 'You are already friends',
                 'success' => false
@@ -32,6 +34,8 @@ class FriendshipController extends Controller
         $status = array_search(User::FRIENDSHIP_STATUS_PENDING, User::FRIENDSHIP_STATUS_MAP);
 
         $service->sendFriendRequest($sender, $receiver, $status);
+
+        $receiver->notify(new FriendRequestNotification($sender));
 
         return response()->json([
             'message' => 'Friend request send',
@@ -46,15 +50,20 @@ class FriendshipController extends Controller
      * @param FriendshipService $service
      * @param User $sender
      * @param User $receiver
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function approveFriendRequest(
         FriendshipService $service,
         User $sender,
-        User $receiver
+        User $receiver,
+        Request $request
     )
     {
-        $status = array_search(User::FRIENDSHIP_STATUS_APPROVED, array_keys(User::FRIENDSHIP_STATUS_MAP));;
+        $status = array_search(User::FRIENDSHIP_STATUS_APPROVED, User::FRIENDSHIP_STATUS_MAP);
         $service->updateFriendship($sender, $receiver, $status);
+
+        $receiver->notifications()->where('id', $request->input('notification_id'))->update(['read_at' => now()]);
 
         return response()->json([
             'message' => 'Friendship approved',
@@ -68,15 +77,20 @@ class FriendshipController extends Controller
      * @param FriendshipService $service
      * @param User $sender
      * @param User $receiver
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function rejectFriendRequest(
         FriendshipService $service,
         User $sender,
-        User $receiver
+        User $receiver,
+        Request $request
     )
     {
-        $status = array_search(User::FRIENDSHIP_STATUS_REJECTED, array_keys(User::FRIENDSHIP_STATUS_MAP));
+        $status = array_search(User::FRIENDSHIP_STATUS_REJECTED, User::FRIENDSHIP_STATUS_MAP);
         $service->updateFriendship($sender, $receiver, $status);
+
+        $receiver->notifications()->where('id', $request->input('notification_id'))->update(['read_at' => now()]);
 
         return response()->json([
             'message' => 'Friendship rejected',
@@ -97,16 +111,15 @@ class FriendshipController extends Controller
         User $receiver
     )
     {
-        if (!Auth::user()->friendship->contains($receiver->id)) {
-            return response()->json([
-                'message' => 'You are not friends',
-                'success' => false
-            ]);
+        $sender = User::find(Auth::id());
+        if ($sender->approvedFriends->contains($receiver->id)) {
+           $success = $service->unfriend($sender, $receiver);
+        } else {
+            $success = $service->unfriend($receiver, $sender);
         }
-        $service->unfriend(Auth::user(), $receiver);
         return response()->json([
             'message' => 'Unfriended',
-            'success' => true
+            'success' => (boolean) $success
         ]);
     }
 

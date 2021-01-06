@@ -7,7 +7,7 @@
                 <div class="card">
                     <div class="card-header">{{ __('friends.friends.card_header') }}</div>
                     <div class="card-body">
-                        @foreach($user->approvedFriends as $friend)
+                        @foreach($user->friends as $friend)
                             <div class="friend-container d-flex justify-content-between mt-1">
                                     <h2 >{{ $friend->name }}</h2>
                                     <button class="btn-danger btn unfriend" data-url="{{ route('friendship.unfriend', $friend->id) }}">{{ __('profile.friends.unfriend') }}</button>

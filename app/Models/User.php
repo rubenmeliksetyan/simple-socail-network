@@ -61,7 +61,7 @@ class User extends Authenticatable
      *
      * @return BelongsToMany
      */
-    public function friendship() :BelongsToMany
+    public function friends() :BelongsToMany
     {
         return $this->belongsToMany(
             User::class,
@@ -83,16 +83,64 @@ class User extends Authenticatable
             'user_friends',
             'sender_id',
             'receiver_id')
-            ->wherePivot('status', 1);
+            ->wherePivot('status', 1)
+            ->withPivot('status');
     }
 
     /**
+     * @return BelongsToMany
+     */
+    function friendsOf()
+    {
+        return $this->belongsToMany(
+            User::class,
+            'user_friends',
+            'receiver_id',
+            'sender_id')
+            ->wherePivot('status',  1)
+            ->withPivot('status');
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFriendsAttribute()
+    {
+        if ( ! array_key_exists('friends', $this->relations)) $this->loadFriends();
+
+        return $this->getRelation('friends');
+    }
+
+    /**
+     *
+     */
+    protected function loadFriends()
+    {
+        if ( ! array_key_exists('friends', $this->relations))
+        {
+            $friends = $this->mergeFriends();
+
+            $this->setRelation('friends', $friends);
+        }
+    }
+
+    /**
+     * @return mixed
+     */
+    protected function mergeFriends()
+    {
+        return $this->approvedFriends->merge($this->friendsOf);
+    }
+
+    /**
+     *  check for auth user and profiles holder friendship status
+     *
      * @param int $id
      * @return string
      */
     public function checkFriendshipStatus(int $id)
     {
-        $friend = $this->friendship()->where('id', $id)->first();
+        $friend = $this->friends()->where('id', $id)->first() ?? $this->friendsOf()->where('id', $id)->first();
 
         if (!is_null($friend)) {
             return self::FRIENDSHIP_STATUS_MAP[$friend->pivot->status];

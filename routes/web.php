@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\{FriendshipController, ProfileController, UserController};
+use App\Http\Controllers\{FriendshipController, NotificationController, ProfileController, UserController};
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -49,5 +49,7 @@ Route::middleware('auth')->group(function () {
             [FriendshipController::class, 'unfriend']
         )->name('unfriend');
     });
+
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications');
 });
 

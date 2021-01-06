@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\UserUpdateRequest;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Session;
 
 class ProfileController extends Controller
@@ -18,14 +17,9 @@ class ProfileController extends Controller
      */
     public function index()
     {
-        return view('profile.index', [
-            'profileData' => [
-                'user' => Auth::user(),
-                'approvedFriends' => Auth::user()->approvedFriends()
-                    ->take(Config::get('constants.profile_friends_count'))->get(),
-            ]
+        $user = User::find(Auth::id());
 
-        ]);
+        return view('profile.index', compact('user'));
     }
 
     /**
@@ -49,14 +43,10 @@ class ProfileController extends Controller
         if (Auth::id() == $user->id) {
             return redirect()->route('profile.index');
         }
-        $profileData = [
-            'user' => $user,
-            'approvedFriends' => $user->approvedFriends()
-                ->take(Config::get('constants.profile_friends_count'))->get(),
-            'friendshipStatus' => Auth::user()->checkFriendshipStatus($user->id)
-        ];
 
-        return view('profile.show', compact('profileData'));
+        $user->friendshipStatus = Auth::user()->checkFriendshipStatus($user->id);
+
+        return view('profile.show', compact('user'));
     }
 
     /**

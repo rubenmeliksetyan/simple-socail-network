@@ -15,7 +15,7 @@ class FriendshipService implements FriendshipInterface
      */
     public function sendFriendRequest(User $sender, User $receiver, int $status)
     {
-        $sender->friendship()->attach($receiver, ['status' => $status]);
+        $sender->friends()->attach($receiver, ['status' => $status]);
     }
 
     /**
@@ -26,18 +26,18 @@ class FriendshipService implements FriendshipInterface
      */
     public function updateFriendship(User $sender, User $receiver, int $status)
     {
-        $friendship = $sender->friendship()->where('receiver_id', $receiver->id)->first();
+        $friendship = $sender->friends()->where('receiver_id', $receiver->id)->first();
         return $friendship->pivot->update(['status' => $status]);
 
     }
 
     /**
-     * @param Authenticatable $user
+     * @param User $user
      * @param User $receiver
      * @return mixed|void
      */
-    public function unfriend(Authenticatable $user, User $receiver)
+    public function unfriend(User $user, User $receiver)
     {
-        return $user->friendship()->detach($receiver);
+        return $user->friends()->detach($receiver);
     }
 }
