@@ -8,7 +8,7 @@
             </div>
         </div>
         <div class="col-xl-6">
-            @include('profile.components.feed')
+            @include('post.components.feed')
 
         </div>
 
@@ -20,3 +20,13 @@
     </div>
 
 @endsection
+@push('scripts')
+    <script src="{{ mix('js/pages/posts.js') }}"></script>
+    <script type="text/javascript">
+        new social.PostsPageManager({
+            elements: {
+                postsContent: $('#posts_content'),
+            }
+        })
+    </script>
+@endpush

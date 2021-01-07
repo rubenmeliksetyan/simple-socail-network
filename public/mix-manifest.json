@@ -2,5 +2,6 @@
     "/js/app.js": "/js/app.js",
     "/css/app.css": "/css/app.css",
     "/js/pages/notifications.js": "/js/pages/notifications.js",
+    "/js/pages/posts.js": "/js/pages/posts.js",
     "/js/pages/profile.js": "/js/pages/profile.js"
 }

@@ -14,7 +14,8 @@ const mix = require('laravel-mix');
 mix
     .js('resources/js/app.js', 'public/js')
     .js('resources/js/pages/profile.js', 'public/js/pages')
-    .js('resources/js/pages/notifications.js', 'public/js/pages');
+    .js('resources/js/pages/notifications.js', 'public/js/pages')
+    .js('resources/js/pages/posts.js', 'public/js/pages');
 mix
     .sass('resources/sass/app.scss', 'public/css');
 mix.sourceMaps();

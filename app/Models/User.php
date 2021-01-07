@@ -102,6 +102,16 @@ class User extends Authenticatable
     }
 
     /**
+     *  User posts
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
+    }
+
+    /**
      * @return mixed
      */
     public function getFriendsAttribute()

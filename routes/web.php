@@ -1,6 +1,10 @@
 <?php
 
-use App\Http\Controllers\{FriendshipController, NotificationController, ProfileController, UserController};
+use App\Http\Controllers\{FriendshipController,
+    NotificationController,
+    PostController,
+    ProfileController,
+    UserController};
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -48,6 +52,14 @@ Route::middleware('auth')->group(function () {
             '/{receiver:id}/unfriend',
             [FriendshipController::class, 'unfriend']
         )->name('unfriend');
+    });
+
+    Route::prefix('post')->name('post.')->group(function () {
+        Route::get('/create', [PostController::class, 'create'])->name('create');
+        Route::post('{user:id}/store', [PostController::class, 'store'])->name('store');
+        Route::get('{post:id}/edit', [PostController::class, 'edit'])->name('edit');
+        Route::put('{post:id}/update', [PostController::class, 'update'])->name('update');
+        Route::delete('{post:id}/destroy', [PostController::class, 'destroy'])->name('destroy');
     });
 
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications');

@@ -17,8 +17,8 @@ social.AutocompleteManger.prototype = {
 
         _this.elements.autocompleteInput.on('keyup',function() {
             let query = $(this).val();
+            if (query === "") return
             $.ajax({
-
                 url: _this.urls.searchUserURL,
                 type:"GET",
                 data:{'name':query},

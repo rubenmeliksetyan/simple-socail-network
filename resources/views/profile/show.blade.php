@@ -8,7 +8,7 @@
             </div>
         </div>
         <div class="col-xl-6">
-            @include('profile.components.feed')
+            @include('post.components.feed')
         </div>
 
         <div class="col-xl-3">
