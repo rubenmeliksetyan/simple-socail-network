@@ -4,7 +4,7 @@ Simple social network.
 
 # Requirements
 
-* PHP 8.0
+* PHP  >=7.3|8.0
 * MYSQL 5.7.24
 * NPM 6.14.4
 * redis
