@@ -7,11 +7,12 @@ Simple social network.
 * PHP 8.0
 * MYSQL 5.7.24
 * NPM 6.14.4
+* redis
  
 
 # Installation
 
-Pleas do following steps after cloning
+Please do following steps after cloning
 
 **step 1** copy content of .env.example to .env
 
